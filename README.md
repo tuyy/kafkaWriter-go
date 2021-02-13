@@ -5,7 +5,7 @@
  file을 읽어서 kafka에 produce 한다.
 
 ```
-$ make buile
+$ make build
 $ cd dist;./kafkaWriter -h
 
 Usage of ./kafkaWriter:
@@ -15,4 +15,7 @@ Usage of ./kafkaWriter:
         input filename (default "input.log")
   -t string
         topic name for writing
+
+## ex)
+$ ./kafkaWriter -b=dev-tuyy0-cassandra001-ncl.nfra.io:9092 -t=mytest1 -f=input.log
 ```

@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"flag"
+	"fmt"
 	"github.com/tuyy/kafkaWriter-go/pkg/kafka"
 	"log"
 	"os"
@@ -35,7 +36,10 @@ func Init() {
 func main() {
 	Init()
 
+	fmt.Printf("START -- %s, %s, %v\n", args.InputFileName, args.Topic, args.Brokers)
+
 	p := kafka.NewProducer(args.Topic, args.Brokers...)
+	defer p.FlushAndClose()
 
 	f, err := os.Open(args.InputFileName)
 	if err != nil {
@@ -47,6 +51,7 @@ func main() {
 
 	for sc.Scan() {
 		msg := strings.TrimSpace(sc.Text())
+		fmt.Println(msg)
 		err = p.WriteMsg(nil, []byte(msg), nil)
 		if err != nil {
 			log.Fatalln(err)
@@ -55,5 +60,6 @@ func main() {
 	if err = sc.Err(); err != nil {
 		log.Fatalln(err)
 	}
+	fmt.Println("FIN --")
 }
 
